@@ -1,25 +1,11 @@
-if ( ! navigator.serviceWorker ){
+var ServiceWorkerAdapter = require('./utils/ServiceWorkerAdapter');
+
+// check Service Worker service worker support
+if ( ! ServiceWorkerAdapter.isSupported() ){
   throw new Error( "Current browser doesn't support this app" );
 }
 
-// init serviceWorker
-navigator.serviceWorker
-         .register( 'service-worker.js' )
-         .then( onServiceWorkerInstall )
-         .catch( onServiceWorkerFail );
+// init Service Worker
+var serviceWorker = new ServiceWorkerAdapter( 'service-worker.js' );
 
-/**
- * Process registered serviceWorker
- * @param registration
- */
-function onServiceWorkerInstall( registration ){
-  console.log('ServiceWorker registration successful', registration);
-}
-
-/**
- * Process serviceWorker fail
- * @param error
- */
-function onServiceWorkerFail( error ){
-  console.error('ServiceWorker registration failed: ', error);
-}
+//
