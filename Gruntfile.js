@@ -16,10 +16,15 @@ module.exports = function (grunt) {
         },
 
         browserify: {
+            options:{
+              browserifyOptions:{
+                debug: true
+              }
+            },
             dist: {
-                files: {
-                    'app/js/build/bundle.js': 'app/js/app.js'
-                }
+              files: {
+                'app/js/build/bundle.js': 'app/js/app.js'
+              }
             }
         },
 
