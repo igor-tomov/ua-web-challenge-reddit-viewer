@@ -1,4 +1,4 @@
-importScripts( "js/polyfill/serviceworker-cache-polyfill.js" );
+importScripts( "app/js/polyfill/serviceworker-cache-polyfill.js" );
 
 /**
  * Provide serving and caching of request via ServiceWorker
@@ -28,8 +28,6 @@ ServiceWorkerManager.prototype = {
   },
 
   onFetch: function( event ){
-    console.log( "Caught a fetch", event.request.url );
-
     event.respondWith( this.respond( event.request ) );
   },
 
@@ -68,14 +66,16 @@ ServiceWorkerManager.prototype = {
                .then(function(response){
                   // Cache hit - return response
                   if (response) {
-                    return response;
+                      console.log( request.url, " fetched from cache" );
+                      return response;
                   }
 
                   var fetchRequest = request.clone();
 
                   return fetch(fetchRequest).then(function(response) {
                       // Check if we received a valid response
-                      if(!response || response.status !== 200 || response.type !== 'basic') {
+                      if(!response || response.status !== 200 /*|| response.type !== 'basic'*/) {
+                        //console.warn( "Invalid response: ", response );
                         return response;
                       }
 
