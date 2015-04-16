@@ -15,6 +15,8 @@ function ServiceWorkerManager(){
 }
 
 ServiceWorkerManager.prototype = {
+  constructor: ServiceWorkerManager,
+
   CACHE_NAME: 'reddit-api-results',
 
   onInstall: function(){
