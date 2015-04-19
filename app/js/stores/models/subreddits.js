@@ -37,6 +37,7 @@ Subreddit.prototype = {
         author: data.author,
         url: data.url,
         created: data.created,
+        text: data.selftext,
         comments: comments[i] || []
       }
     });
