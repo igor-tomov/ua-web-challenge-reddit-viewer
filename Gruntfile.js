@@ -45,7 +45,7 @@ module.exports = function (grunt) {
         watch: {
             js: {
                 files: [
-                    'app/js/**/*.js'
+                    ['app/js/**/*.js', 'app/js/**/*.jsx']
                 ],
                 tasks: ['react:dist', 'browserify:dist']
             },

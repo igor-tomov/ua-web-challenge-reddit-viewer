@@ -15,10 +15,11 @@ if ( serviceWorkerConfig.enabled ){
 
 // Init app
 var React        = require('react'),
+    config       = require('./config'),
     RedditViewer = require('./components/RedditViewer.react');
 
 
-React.render( React.createElement( RedditViewer ), document.getElementById('app-root') );
+React.render( React.createElement( RedditViewer, config ), document.getElementById('app-root') );
 
 
 /*var Subreddit = require('./stores/models/subreddits');
