@@ -29,17 +29,20 @@ module.exports = function (grunt) {
         },
 
         react: {
-            dist: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: "app/js",
-                        src: [ "components/*.react.jsx" ],
-                        dest: "app/js",
-                        ext: ".react.js"
-                    }
-                ]
-            }
+          options: {
+            harmony: true
+          },
+          dist: {
+            files: [
+              {
+                expand: true,
+                cwd: "app/js",
+                src: [ "components/*.react.jsx" ],
+                dest: "app/js",
+                ext: ".react.js"
+              }
+            ]
+          }
         },
 
         watch: {
