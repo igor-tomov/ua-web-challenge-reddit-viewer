@@ -13,12 +13,18 @@ if ( serviceWorkerConfig.enabled ){
 }
 
 
+// Init app
+var React        = require('react'),
+    RedditViewer = require('./components/RedditViewer.react');
 
 
+React.render( React.createElement( RedditViewer ), document.getElementById('app-root') );
 
-var Subreddit = require('./stores/models/subreddits');
-var subreddit = new Subreddit( 'ssl1' );
 
+/*var Subreddit = require('./stores/models/subreddits');
+var subreddit = new Subreddit( 'java' );
+var reactRouter = require('react-router');
+console.log( "reactRouter:", reactRouter );
 
 subreddit.about()
          .then(function( data ){
@@ -37,42 +43,4 @@ subreddit.posts( "hot" )
           })
           .catch(function( error ){
             console.log( "Posts error: ", error );
-          });
-
-/*
-['hot', 'new', 'top', 'controversial'].forEach(function( section ){
-
-  reddit[ section ]('javascript').limit(25).fetch(function( response ){
-    var posts = response.data.children;
-
-    // fetch comments for each article in target subreddit
-    var comments = [];
-
-    posts.forEach(function( item ){
-      var promise = new Promise(function( resolve ){
-        reddit.comments( item.data.id, 'javascript' ).sort( "hot" ).fetch(function( response ) {
-          resolve( response );
-        });
-      });
-
-      comments.push( promise );
-    });
-
-    // Reduce articles data
-    Promise.all( comments ).then(function( comments ){
-      posts = posts.map(function( item, i ){
-        var data = item.data;
-
-        return {
-          title: data.title,
-          author: data.author,
-          url: data.url,
-          created: data.created,
-          comments: comments[i]
-        }
-      });
-
-      console.log( section, " section: ", posts );
-    });
-  });
-});*/
+          });*/
