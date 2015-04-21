@@ -20,28 +20,3 @@ var React        = require('react'),
 
 
 React.render( React.createElement( RedditViewer, config ), document.getElementById('app-root') );
-
-
-/*var Subreddit = require('./stores/models/subreddits');
-var subreddit = new Subreddit( 'java' );
-var reactRouter = require('react-router');
-console.log( "reactRouter:", reactRouter );
-
-subreddit.about()
-         .then(function( data ){
-            console.log( subreddit.name, data );
-         })
-         .catch(function( errorCode ){
-            switch ( errorCode ){
-              case 403: console.warn( "Subreddit isn't accessible. Probably, it might be a private" ); break;
-              case 404: console.warn( "Subreddit '%s' isn't found", subreddit.name ); break;
-            }
-         });
-
-subreddit.posts( "hot" )
-          .then(function( data ){
-            console.log( "Posts: ", data );
-          })
-          .catch(function( error ){
-            console.log( "Posts error: ", error );
-          });*/
