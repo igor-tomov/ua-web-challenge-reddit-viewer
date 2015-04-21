@@ -1,8 +1,7 @@
 var keymirror = require('keymirror');
 
 module.exports = keymirror({
-  DEFAULT: null,
-  PENDING: null,
+  WELCOME: null, // front page
   SUBREDDIT_SUPPLIED: null,
-  SUBREDDIT_POST_OPENED: null
+  INVALID_SUBREDDIT_SUPPLY: null
 });
