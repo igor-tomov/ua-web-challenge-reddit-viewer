@@ -40,7 +40,6 @@ module.exports = function (grunt) {
                 src: [ "components/*.react.jsx" ],
                 dest: "app/js",
                 ext: ".react.js"
-
               }
             ]
           }
@@ -61,4 +60,7 @@ module.exports = function (grunt) {
             }
         }
     });
+
+  // Default task(s).
+  grunt.registerTask('default', ['react', 'browserify']);
 };
