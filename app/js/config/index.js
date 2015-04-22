@@ -1,6 +1,10 @@
 module.exports = {
   title: 'Reddit Viewer',
-  invalidSubredditAlert: 'Ivalid subreddit name has been supplied',
+
+  alerts: {
+    invalidSubreddit: 'Ivalid subreddit name has been supplied',
+    failedLoadSubreddit: 'Subreddit "%s" has failed to load'
+  },
 
   examples: {
     './?/javascript': 'Javascript',

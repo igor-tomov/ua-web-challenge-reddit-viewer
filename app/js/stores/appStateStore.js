@@ -4,7 +4,9 @@ var Reflux = require("reflux"),
 module.exports = Reflux.createStore({
 
   _isURIEmpty: function(){
-    return location.search.search( /^(\?\/)?.+/ ) === -1;
+    var query = location.search;
+
+    return query === "" || query === "?/";
   },
 
   /**

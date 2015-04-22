@@ -4,3 +4,18 @@
 .reddit-viewer .welcome .examples .list-group {
   max-width: 400px;
 }
+.reddit-viewer .invalid-subreddit-alert .alert {
+  max-width: 300px;
+  margin: 0 auto;
+  text-align: center;
+}
+.reddit-viewer .pending-alert {
+  width: 100%;
+  height: auto;
+}
+.reddit-viewer .pending-alert .pending-alert-img {
+  margin: 0 auto;
+  width: 441px;
+  height: 291px;
+  background: url("../../img/load.gif") no-repeat;
+}
