@@ -18,6 +18,22 @@ Subreddit.prototype = {
   SECTIONS: config.sections,
 
   /**
+   * Build output "about" data
+   *
+   * @param data
+   * @returns {Object}
+   * @private
+   */
+  _prepareAbout: function( data ){
+    return {
+      title: data.title,
+      description: data.public_description,
+      thumbnail: data.header_img,
+      url: config.baseURL + data.url
+    }
+  },
+
+  /**
    * Build output posts data
    *
    * @param {Array} posts
@@ -53,16 +69,11 @@ Subreddit.prototype = {
           var data = response.data;
 
           if ( data ) {
-            resolve({
-              title: data.title,
-              description: data.public_description,
-              thumbnail: data.header_img,
-              url: config.baseURL + data.url
-            });
+            resolve( this._prepareAbout( data ) );
           }else{//some error has been occurred
             reject( response.error );
           }
-        },
+        }.bind(this),
         function( error ){
           reject( error || 404 );
         }
