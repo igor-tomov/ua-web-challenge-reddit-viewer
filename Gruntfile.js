@@ -62,5 +62,5 @@ module.exports = function (grunt) {
     });
 
   // Default task(s).
-  grunt.registerTask('default', ['react', 'browserify']);
+  grunt.registerTask('default', ['less', 'react', 'browserify']);
 };
