@@ -26,5 +26,11 @@ module.exports = Reflux.createStore({
     this._posts    = posts;
 
     this.trigger( this.getCurrentState() );
+  },
+
+  onLoadFailed: function(){
+    this._state = subredditStates.SUBREDDIT_FAILED;
+
+    this.trigger( this.getCurrentState() );
   }
 });

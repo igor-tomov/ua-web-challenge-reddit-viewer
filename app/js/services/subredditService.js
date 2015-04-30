@@ -3,7 +3,7 @@ var config  = require('../config/reddit'),
     Promise = require('promise-es6').Promise;
 
 /**
- * Model layer which is provides deal with subreddit data
+ * Provides facade API for dealing with Reddit.js
  *
  * @param {String} name
  * @constructor
@@ -123,12 +123,16 @@ Subreddit.prototype = {
                     posts, comments;
 
                 if ( ! data ) {//some error has been occurred
-                  reject( response.error );
+                  resolve( response.error );
                   return;
                 }
 
                 //retrieve post data
                 posts = data.children;
+
+                if ( ! posts || posts.length < 1 ){// post list is empty
+                  resolve( [] );
+                }
 
                 // fetch comments for obtained posts
                 comments = [];

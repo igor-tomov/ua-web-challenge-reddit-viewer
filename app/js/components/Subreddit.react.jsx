@@ -1,27 +1,39 @@
 /** @jsx React.DOM */
 var React  = require("react"),
     Reflux = require("reflux"),
+    config = require('../config'),
     states = require("../constants/subredditStates"),
+
     PendingAlert     = require("./shared/PendingAlert.react"),
+    InvalidAlert     = require("./shared/InvalidAlert.react"),
     subredditActions = require("../actions/sebredditActions"),
     subredditStore   = require("../stores/suredditStore");
 
-var Content = React.createClass({
+
+/**
+ * Container for representation of obtained Subreddit data
+ *
+ * @type {*|Function}
+ */
+var SubredditContent = React.createClass({
   render(){
     return null;
   }
 });
 
+/**
+ * Output Subreddit component
+ */
 module.exports = React.createClass({
 
-  mixins: [ Reflux.connect( subredditStore, "_onLoadSubreddit" ) ],
+  mixins: [ Reflux.listenTo( subredditStore, "_onLoadSubreddit" ) ],
 
   _getActiveComponent( state ){
     switch ( state ){
       case states.SUBREDDIT_PENDING: return <PendingAlert />;
-      case states.SUBREDDIT_READY: return <Content {...this.state}/>;
+      case states.SUBREDDIT_READY: return <SubredditContent {...this.state}/>;
       case states.SUBREDDIT_FAILED:
-        var message = config.alert.failedLoadSubreddit.replace('%s', this.props.name );
+        var message = config.alerts.failedLoadSubreddit.replace('%s', this.props.name );
         return <InvalidAlert message={message} />;
     }
   },
