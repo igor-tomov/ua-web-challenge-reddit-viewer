@@ -1,9 +1,10 @@
 /** @jsx React.DOM */
-var React = require("react");
-var states = require("../constants/subredditStates");
-
-// load components
-var PendingAlert = require("./shared/PendingAlert.react");
+var React  = require("react"),
+    Reflux = require("reflux"),
+    states = require("../constants/subredditStates"),
+    PendingAlert     = require("./shared/PendingAlert.react"),
+    subredditActions = require("../actions/sebredditActions"),
+    subredditStore   = require("../stores/suredditStore");
 
 var Content = React.createClass({
   render(){
@@ -12,6 +13,8 @@ var Content = React.createClass({
 });
 
 module.exports = React.createClass({
+
+  mixins: [ Reflux.connect( subredditStore, "_onLoadSubreddit" ) ],
 
   _getActiveComponent( state ){
     switch ( state ){
@@ -23,16 +26,16 @@ module.exports = React.createClass({
     }
   },
 
+  _onLoadSubreddit: function( state ){
+    this.setState( state );
+  },
+
   getInitialState(){
-    return {
-      state: states.SUBREDDIT_PENDING,
-      about: null,
-      posts: null
-    };
+    return subredditStore.getCurrentState();
   },
 
   componentWillMount(){
-
+    subredditActions.load( this.props.name );
   },
 
   render(){

@@ -1,5 +1,5 @@
-var config  = require('../../config/reddit'),
-    reddit  = require('../../utils/RedditAdapter'),
+var config  = require('../config/reddit'),
+    reddit  = require('../utils/RedditAdapter'),
     Promise = require('promise-es6').Promise;
 
 /**
@@ -88,6 +88,15 @@ Subreddit.prototype = {
    */
   sections: function(){
     return this.SECTIONS.slice();
+  },
+
+  /**
+   * Get first item from section list
+   *
+   * @return {String}
+   */
+  firstSection: function(){
+    return this.SECTIONS.slice( 0, 1 )[0];
   },
 
   /**
