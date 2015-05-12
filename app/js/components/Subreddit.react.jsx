@@ -8,13 +8,20 @@ var React  = require("react"),
 
 var Content = React.createClass({
   render(){
-    return null;
+    var about = this.props.about;
+
+    return (
+      <div>
+        <h1>{about.title}</h1>
+        <h2>{about.description}</h2>
+      </div>
+    );
   }
 });
 
 module.exports = React.createClass({
 
-  mixins: [ Reflux.connect( subredditStore, "_onLoadSubreddit" ) ],
+  mixins: [ Reflux.listenTo( subredditStore, "_onLoadSubreddit" ) ],
 
   _getActiveComponent( state ){
     switch ( state ){

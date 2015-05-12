@@ -19,11 +19,11 @@ module.exports = Reflux.createStore({
     }
   },
 
-  onLoadCompleted: function( about, sections, posts ){
+  onLoadCompleted: function( data ){
     this._state    = subredditStates.SUBREDDIT_READY;
-    this._about    = about;
-    this._sections = sections;
-    this._posts    = posts;
+    this._about    = data.shift();
+    this._sections = data.shift();
+    this._posts    = data.shift();
 
     this.trigger( this.getCurrentState() );
   }
