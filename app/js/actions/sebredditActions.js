@@ -6,7 +6,7 @@ var subredditActions = Reflux.createActions([
   "loadCompleted",
   "loadFailed",
 
-  "selectSection",
+  "loadSection",
   "loadSectionCompleted",
   "loadSectionFailed",
 
@@ -29,7 +29,7 @@ subredditActions.load.preEmit = function( name ){
 };
 
 // Trigger Subreddit section loading
-subredditActions.selectSection.preEmit = function( name, section ){
+subredditActions.loadSection.preEmit = function( name, section ){
   var subreddit = new SubredditService( name ),
       sections  = subreddit.sections();
 

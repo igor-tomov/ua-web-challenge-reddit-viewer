@@ -17,7 +17,14 @@ var React  = require("react"),
  */
 var SubredditContent = React.createClass({
   render(){
-    return null;
+    var about = this.props.about;
+
+    return (
+      <div>
+        <h1>{about.title}</h1>
+        <h2>{about.description}</h2>
+      </div>
+    );
   }
 });
 
