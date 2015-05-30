@@ -1,3 +1,5 @@
+@import (reference) "/node_modules/bootstrap/less/bootstrap.less";
+
 .reddit-viewer{
 
   .welcome{
@@ -29,6 +31,49 @@
       width: 120px;
       height: 120px;
       background: url("../../img/load.gif") no-repeat center center;
+    }
+  }
+
+  .subreddit{
+    .container;
+
+    .subreddit-header{
+      .page-header;
+    }
+
+    .subreddit-sections{
+      .make-md-column(6);
+
+      .subreddit-section-tabs{
+        .nav;
+        .nav-tabs;
+      }
+
+      .subreddit-section-posts{
+        .list-group;
+
+        .subreddit-post-item{
+          .list-group-item;
+
+          &:first-child{
+            border-top: none;
+          }
+
+          > h4{
+            .list-group-item-heading;
+            font-size: 16px;
+          }
+          > p{
+            .list-group-item-text;
+
+            .post-view{
+              display: inline-block;
+              position: absolute;
+              right: 15px;
+            }
+          }
+        }
+      }
     }
   }
 }

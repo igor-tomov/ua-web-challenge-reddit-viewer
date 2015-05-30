@@ -1,6 +1,8 @@
 /** @jsx React.DOM */
-var React  = require("react"),
-    Reflux = require("reflux"),
+var React      = require("react"),
+    Reflux     = require("reflux"),
+    classnames = require('classnames'),
+
     config = require('../config'),
     states = require("../constants/subredditStates"),
 
@@ -11,18 +13,106 @@ var React  = require("react"),
 
 
 /**
+ * Viewer of main information about Sebreddit
+ */
+var SubredditHeader = React.createClass({
+  render(){
+    return (
+      <div className='subreddit-header'>
+        <h1>{this.props.title}</h1>
+        <p className='lead'>{this.props.description}</p>
+      </div>
+    );
+  }
+});
+
+var SubredditSectionTabs = React.createClass({
+  _onTabClick(event){
+    event.preventDefault();
+
+    var section = event.target.dataset.section;
+
+    if ( this.props.section !== section ){
+      console.log( section );
+    }
+  },
+
+  render(){
+    var self    = this,
+        current = this.props.section;
+
+    // build tab list
+    var sectionList = this.props.sectionList.map(( section, i ) => {
+      var classes = classnames({ active: section === current });
+
+      return (
+        <li key={i} className={classes}>
+          <a href="#" data-section={section} onClick={self._onTabClick}>{section}</a>
+        </li>
+      );
+    });
+
+    return (
+      <nav>
+        <ul className='subreddit-section-tabs'>
+          {sectionList}
+        </ul>
+      </nav>
+    );
+  }
+});
+
+var SubredditSectionPosts = React.createClass({
+  render(){
+    var posts = this.props.posts.map(( post, i ) => {
+      return (
+        <div key={i} className='subreddit-post-item'>
+          <h4>{post.title}</h4>
+          <p>
+            Created: <i>{post.created}</i>,
+            author: <i>{post.author}</i>
+            <span className='post-view'>
+              <a href='#' data-post-index={i}>view</a>
+            </span>
+          </p>
+        </div>
+      );
+    });
+
+    return (
+      <div className='subreddit-section-posts'>
+        {posts}
+      </div>
+    );
+  }
+});
+
+
+var SubredditSections = React.createClass({
+  render(){
+    var props = this.props;
+
+    return (
+      <div className='subreddit-sections'>
+        <SubredditSectionTabs section={props.section} sectionList={props.sectionList} />
+        <SubredditSectionPosts posts={props.posts} />
+      </div>
+    );
+  }
+});
+
+/**
  * Container for representation of obtained Subreddit data
- *
- * @type {*|Function}
  */
 var SubredditContent = React.createClass({
   render(){
-    var about = this.props.about;
-
     return (
       <div>
-        <h1>{about.title}</h1>
-        <h2>{about.description}</h2>
+        <SubredditHeader {...this.props.about} />
+
+        <div className='row'>
+          <SubredditSections {...this.props} />
+        </div>
       </div>
     );
   }
@@ -61,7 +151,7 @@ module.exports = React.createClass({
     var activeComponent = this._getActiveComponent( this.state.state );
 
     return (
-      <div className='container'>
+      <div className='subreddit'>
         {activeComponent}
       </div>
     );
