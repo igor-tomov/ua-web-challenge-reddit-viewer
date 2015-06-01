@@ -25,7 +25,7 @@ module.exports = Reflux.createStore({
     this._state       = subredditStates.SUBREDDIT_READY;
     this._about       = data.shift();
     this._sectionList = data.shift();
-    this._posts       = data.shift();
+    this._posts       = data.shift().posts;
     this._section     = this._sectionList[0];
 
     this.trigger( this.getCurrentState() );
@@ -39,14 +39,18 @@ module.exports = Reflux.createStore({
 
   onLoadSection: function( name, section ){
     this._section = section;
+    this._state   = subredditStates.SUBREDDIT_SECTION_PENDING;
+
+    this.trigger( this.getCurrentState() );
   },
 
-  onLoadSectionCompleted: function( posts ){
-    if ( this._section !== posts.sectionName ){
+  onLoadSectionCompleted: function( data ){
+    if ( this._section !== data.section ){
       return;
     }
 
-    this._posts = posts;
+    this._state = subredditStates.SUBREDDIT_READY;
+    this._posts = data.posts;
 
     this.trigger( this.getCurrentState() );
   }

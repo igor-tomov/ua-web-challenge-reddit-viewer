@@ -27,19 +27,9 @@ var SubredditHeader = React.createClass({
 });
 
 var SubredditSectionTabs = React.createClass({
-  _onTabClick(event){
-    event.preventDefault();
-
-    var section = event.target.dataset.section;
-
-    if ( this.props.section !== section ){
-      console.log( section );
-    }
-  },
-
   render(){
-    var self    = this,
-        current = this.props.section;
+    var current = this.props.section,
+        handler = this.props.onSelectSection;
 
     // build tab list
     var sectionList = this.props.sectionList.map(( section, i ) => {
@@ -47,7 +37,7 @@ var SubredditSectionTabs = React.createClass({
 
       return (
         <li key={i} className={classes}>
-          <a href="#" data-section={section} onClick={self._onTabClick}>{section}</a>
+          <a href="#" data-section={section} onClick={handler}>{section}</a>
         </li>
       );
     });
@@ -89,13 +79,39 @@ var SubredditSectionPosts = React.createClass({
 
 
 var SubredditSections = React.createClass({
+  _getStateComponent( state ){
+    var props = this.props;
+
+    switch ( state ){
+      case states.SUBREDDIT_SECTION_PENDING: return <PendingAlert />;
+      case states.SUBREDDIT_READY: return <SubredditSectionPosts posts={props.posts} />;
+      case states.SUBREDDIT_SECTION_FAILED:
+        var message = config.alerts.failedLoadSubreddit.replace('%s', props.name );
+        return <InvalidAlert message={message} />;
+    }
+  },
+
+  onSelectSection( event ){
+    event.preventDefault();
+
+    var section = event.target.dataset.section,
+        props   = this.props;
+
+    if ( props.section !== section ){
+      subredditActions.loadSection( props.about.title, section );
+    }
+  },
+
   render(){
     var props = this.props;
 
     return (
       <div className='subreddit-sections'>
-        <SubredditSectionTabs section={props.section} sectionList={props.sectionList} />
-        <SubredditSectionPosts posts={props.posts} />
+        <SubredditSectionTabs
+            section={props.section}
+            sectionList={props.sectionList}
+            onSelectSection={this.onSelectSection}/>
+        {this._getStateComponent(props.state)}
       </div>
     );
   }
@@ -125,10 +141,12 @@ module.exports = React.createClass({
 
   mixins: [ Reflux.listenTo( subredditStore, "_onLoadSubreddit" ) ],
 
-  _getActiveComponent( state ){
+  _getStateComponent( state ){
     switch ( state ){
       case states.SUBREDDIT_PENDING: return <PendingAlert />;
-      case states.SUBREDDIT_READY: return <SubredditContent {...this.state}/>;
+      case states.SUBREDDIT_READY:
+      case states.SUBREDDIT_SECTION_PENDING:
+        return <SubredditContent {...this.state} name={this.props.name}/>;
       case states.SUBREDDIT_FAILED:
         var message = config.alerts.failedLoadSubreddit.replace('%s', this.props.name );
         return <InvalidAlert message={message} />;
@@ -148,11 +166,9 @@ module.exports = React.createClass({
   },
 
   render(){
-    var activeComponent = this._getActiveComponent( this.state.state );
-
     return (
       <div className='subreddit'>
-        {activeComponent}
+        {this._getStateComponent( this.state.state )}
       </div>
     );
   }

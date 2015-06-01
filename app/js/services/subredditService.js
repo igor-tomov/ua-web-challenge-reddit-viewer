@@ -38,17 +38,12 @@ Subreddit.prototype = {
    *
    * @param {Array} posts
    * @param {Array} [comments]
-   * @param {String} [section]
    * @returns {Array}
    *
    * @private
    */
-  _preparePosts: function( posts, comments, section ){
+  _preparePosts: function( posts, comments ){
     comments = comments || [];
-
-    if ( section ){
-      posts.sectionName = section;
-    }
 
     return posts.map(function( item, i ){
       var data = item.data;
@@ -148,7 +143,10 @@ Subreddit.prototype = {
 
                 Promise.all( comments ).then(
                   function( comments ){
-                    resolve( self._preparePosts( posts, comments, section ) );
+                    resolve({
+                      posts: self._preparePosts( posts, comments ),
+                      section: section
+                    });
                   },
 
                   // error

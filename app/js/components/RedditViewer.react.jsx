@@ -18,7 +18,7 @@ var Navigation   = require('./Navigation.react'),
 
 module.exports = React.createClass({
 
-  _getActiveComponent( state ){
+  _getStateComponent( state ){
     var props = this.props;
 
     switch ( state ){
@@ -33,12 +33,10 @@ module.exports = React.createClass({
   },
 
   render(){
-    var activeComponent = this._getActiveComponent( this.state.appState );
-
     return (
       <div id='app-container' className='reddit-viewer'>
         <Navigation title={this.props.title} />
-        {activeComponent}
+        {this._getStateComponent( this.state.appState )}
       </div>
     );
   }
