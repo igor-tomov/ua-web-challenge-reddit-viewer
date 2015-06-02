@@ -52,7 +52,7 @@ Subreddit.prototype = {
         title: data.title,
         author: data.author,
         url: data.url,
-        created: data.created,
+        created: data.created_utc,
         text: data.selftext,
         comments: comments[i] || []
       }

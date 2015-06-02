@@ -53,13 +53,23 @@ var SubredditSectionTabs = React.createClass({
 });
 
 var SubredditSectionPosts = React.createClass({
+  getFormattedDate( unixSecs ){
+    var date = new Date( unixSecs * 1000 );
+
+    var day    = date.getDate(),
+        mounth = date.getMonth(),
+        year   = date.getFullYear();
+
+    return ( day < 10 ? '0' + day : day ) + "." + ( mounth < 10 ? '0' + mounth : mounth ) + "." + year;
+  },
+
   render(){
     var posts = this.props.posts.map(( post, i ) => {
       return (
         <div key={i} className='subreddit-post-item'>
-          <h4>{post.title}</h4>
+          <h4><a href={post.url} target='_blank'>{post.title}</a></h4>
           <p>
-            Created: <i>{post.created}</i>,
+            Created: <i>{this.getFormattedDate(post.created)}</i>,
             author: <i>{post.author}</i>
             <span className='post-view'>
               <a href='#' data-post-index={i}>view</a>
