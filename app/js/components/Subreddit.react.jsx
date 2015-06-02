@@ -98,7 +98,7 @@ var SubredditSections = React.createClass({
         props   = this.props;
 
     if ( props.section !== section ){
-      subredditActions.loadSection( props.about.title, section );
+      subredditActions.loadSection( props.name, section );
     }
   },
 
