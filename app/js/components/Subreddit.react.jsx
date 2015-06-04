@@ -64,6 +64,8 @@ var SubredditSectionPosts = React.createClass({
   },
 
   render(){
+    var onSelectPost = this.props.onSelectPost;
+
     var posts = this.props.posts.map(( post, i ) => {
       return (
         <div key={i} className='subreddit-post-item'>
@@ -72,7 +74,7 @@ var SubredditSectionPosts = React.createClass({
             Created: <i>{this.getFormattedDate(post.created)}</i>,
             author: <i>{post.author}</i>
             <span className='post-view'>
-              <a href='#' data-post-index={i}>view</a>
+              <a href='#' data-post-index={i} onClick={onSelectPost}>view</a>
             </span>
           </p>
         </div>
@@ -87,6 +89,34 @@ var SubredditSectionPosts = React.createClass({
   }
 });
 
+var SubredditPost = React.createClass({
+
+  render(){
+    var props = this.props,
+        text;
+
+    text = props.text ? <p class>{props.text}</p> : null;
+
+    return (
+      <div className='subreddit-post'>
+        <div className='subreddit-post-header'>
+          <h4>{props.title}</h4>
+        </div>
+        <div className='body'>
+          {text}
+          <div className='comments'>
+            <div className='comments-header'>
+              <strong>Comments</strong>
+            </div>
+            <div className='comments-list'>
+          </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+});
+
 
 var SubredditSections = React.createClass({
   _getStateComponent( state ){
@@ -94,7 +124,10 @@ var SubredditSections = React.createClass({
 
     switch ( state ){
       case states.SUBREDDIT_SECTION_PENDING: return <PendingAlert />;
-      case states.SUBREDDIT_READY: return <SubredditSectionPosts posts={props.posts} />;
+      case states.SUBREDDIT_READY:
+        return <SubredditSectionPosts posts={props.posts} onSelectPost={this.onSelectPost} />;
+      case states.SUBREDDIT_POST_VIEW:
+        return <SubredditPost {...this.props.posts[this.props.selectedPost]} />;
       case states.SUBREDDIT_SECTION_FAILED:
         var message = config.alerts.failedLoadSubreddit.replace('%s', props.name );
         return <InvalidAlert message={message} />;
@@ -110,6 +143,14 @@ var SubredditSections = React.createClass({
     if ( props.section !== section ){
       subredditActions.loadSection( props.name, section );
     }
+  },
+
+  onSelectPost( event ){
+    event.preventDefault();
+
+    var index = event.target.dataset.postIndex;
+
+    subredditActions.selectPost( index );
   },
 
   render(){
@@ -156,6 +197,7 @@ module.exports = React.createClass({
       case states.SUBREDDIT_PENDING: return <PendingAlert />;
       case states.SUBREDDIT_READY:
       case states.SUBREDDIT_SECTION_PENDING:
+      case states.SUBREDDIT_POST_VIEW:
         return <SubredditContent {...this.state} name={this.props.name}/>;
       case states.SUBREDDIT_FAILED:
         var message = config.alerts.failedLoadSubreddit.replace('%s', this.props.name );

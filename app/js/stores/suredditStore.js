@@ -10,6 +10,7 @@ module.exports = Reflux.createStore({
   _section: null,
   _about: {},
   _posts: {},
+  _selectedPost: 0,
 
   getCurrentState: function(){
     return {
@@ -17,7 +18,8 @@ module.exports = Reflux.createStore({
       about: this._about,
       section: this._section,
       sectionList: this._sectionList,
-      posts: this._posts
+      posts: this._posts,
+      selectedPost: this._selectedPost
     }
   },
 
@@ -51,6 +53,13 @@ module.exports = Reflux.createStore({
 
     this._state = subredditStates.SUBREDDIT_READY;
     this._posts = data.posts;
+
+    this.trigger( this.getCurrentState() );
+  },
+
+  onSelectPost: function( index ){
+    this._state        = subredditStates.SUBREDDIT_POST_VIEW;
+    this._selectedPost = index;
 
     this.trigger( this.getCurrentState() );
   }
