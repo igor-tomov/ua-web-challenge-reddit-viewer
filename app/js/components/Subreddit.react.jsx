@@ -12,6 +12,17 @@ var React      = require("react"),
     subredditStore   = require("../stores/suredditStore");
 
 
+var getFormattedDate = ( unixSecs ) => {
+  var date = new Date( unixSecs * 1000 );
+
+  var day    = date.getDate(),
+      mounth = date.getMonth(),
+      year   = date.getFullYear();
+
+  return ( day < 10 ? '0' + day : day ) + "." + ( mounth < 10 ? '0' + mounth : mounth ) + "." + year;
+}
+
+
 /**
  * Viewer of main information about Sebreddit
  */
@@ -53,16 +64,6 @@ var SubredditSectionTabs = React.createClass({
 });
 
 var SubredditSectionPosts = React.createClass({
-  getFormattedDate( unixSecs ){
-    var date = new Date( unixSecs * 1000 );
-
-    var day    = date.getDate(),
-        mounth = date.getMonth(),
-        year   = date.getFullYear();
-
-    return ( day < 10 ? '0' + day : day ) + "." + ( mounth < 10 ? '0' + mounth : mounth ) + "." + year;
-  },
-
   render(){
     var onSelectPost = this.props.onSelectPost;
 
@@ -71,7 +72,7 @@ var SubredditSectionPosts = React.createClass({
         <div key={i} className='subreddit-post-item'>
           <h4><a href={post.url} target='_blank'>{post.title}</a></h4>
           <p>
-            Created: <i>{this.getFormattedDate(post.created)}</i>,
+            Created: <i>{getFormattedDate(post.created)}</i>,
             author: <i>{post.author}</i>
             <span className='post-view'>
               <a href='#' data-post-index={i} onClick={onSelectPost}>view</a>
@@ -91,24 +92,58 @@ var SubredditSectionPosts = React.createClass({
 
 var SubredditPost = React.createClass({
 
+  buildCommentTree(){
+    var comments = this.props.comments;
+
+    if ( ! comments || ! comments.length ){
+      return <p className='lead'>There is no comments</p>;
+    }
+
+    return comments.map(function buildCommentItem( item, i ){
+      var replies;
+
+      if ( item.replies ){
+        replies = <div className='comments-body'>{item.replies.map(buildCommentItem)}</div>;
+      }
+
+      return (
+          <div key={i} className='comment-item'>
+            <div className='comment-item-header'>
+              <span className='comment-author'>{item.author}</span>
+              <span className='comment-created'>{getFormattedDate(item.created)}</span>
+            </div>
+            <div className='comment-body'>
+              {item.text}
+              {replies}
+            </div>
+          </div>
+      );
+    });
+  },
+
+
   render(){
     var props = this.props,
         text;
 
-    text = props.text ? <p class>{props.text}</p> : null;
+    text = props.text ? <pre className='post-desc'>{props.text}</pre> : null;
 
     return (
       <div className='subreddit-post'>
         <div className='subreddit-post-header'>
-          <h4>{props.title}</h4>
+          <h4><a href={props.url} target='_blank'>{props.title}</a></h4>
+          <div className='btn-block'>
+            <a href='#' className='btn btn-default btn-xs' onClick={props.onBackToSection}>Back to list</a>
+          </div>
         </div>
-        <div className='body'>
+        <div className='subreddit-post-body'>
           {text}
           <div className='comments'>
             <div className='comments-header'>
               <strong>Comments</strong>
             </div>
-            <div className='comments-list'>
+            <div className='comments-body'>
+              {this.buildCommentTree()}
           </div>
           </div>
         </div>
@@ -127,7 +162,7 @@ var SubredditSections = React.createClass({
       case states.SUBREDDIT_READY:
         return <SubredditSectionPosts posts={props.posts} onSelectPost={this.onSelectPost} />;
       case states.SUBREDDIT_POST_VIEW:
-        return <SubredditPost {...this.props.posts[this.props.selectedPost]} />;
+        return <SubredditPost {...this.props.posts[this.props.selectedPost]} onBackToSection={this.onBackToSection} />;
       case states.SUBREDDIT_SECTION_FAILED:
         var message = config.alerts.failedLoadSubreddit.replace('%s', props.name );
         return <InvalidAlert message={message} />;
@@ -151,6 +186,11 @@ var SubredditSections = React.createClass({
     var index = event.target.dataset.postIndex;
 
     subredditActions.selectPost( index );
+  },
+
+  onBackToSection( event ){
+    event.preventDefault();
+    subredditActions.backToSection();
   },
 
   render(){

@@ -1,5 +1,7 @@
 @import (reference) "/node_modules/bootstrap/less/bootstrap.less";
 
+@brand_color: #337ab7;
+
 .reddit-viewer{
 
   .welcome{
@@ -42,7 +44,7 @@
     }
 
     .subreddit-sections{
-      .make-md-column(6);
+      .make-md-column(8);
 
       .subreddit-section-tabs{
         .nav;
@@ -79,6 +81,8 @@
         .panel;
         .panel-default;
 
+        border-radius: 0;
+
         .subreddit-post-header{
           .panel-heading;
 
@@ -89,17 +93,68 @@
 
           h4{
             .panel-title;
+
+            a{
+              color: @brand_color;
+            }
+          }
+
+          .btn-block{
+            padding-top: 10px;
           }
         }
 
-        .body{
-          .comments{
-            .comments-header{
+        .subreddit-post-body{
+          padding: 10px;
 
+          pre.post-desc{
+            background: none;
+            border: none;
+            border-radius: 0;
+          }
+
+          .comments{
+            padding-left: 10px;
+
+            .comments-header{
+              padding-bottom: 5px;
+              font-size: 16px;
+              border-bottom: 1px solid #eeeeee;
             }
 
-            .comments-list{
+            .comments-body{
+              position: relative;
+              width: 100%;
+              padding: 0 5px 0 15px;
 
+              .comment-item{
+                padding-top: 10px;
+
+                >.comments-body{
+                  padding-top: 15px;
+                  border-left: 1px solid #aaa;
+                }
+
+                .comment-item-header{
+                  .comment-author{
+                    font-weight: 800;
+                    color: @brand_color;
+                  }
+
+                  .comment-created{
+                    padding-left: .5em;
+                    font-style: italic;
+                  }
+                }
+
+                .comment-item-body{
+                  .lead;
+                }
+              }
+
+              >.comment-item{
+                padding-top: 20px;
+              }
             }
           }
         }

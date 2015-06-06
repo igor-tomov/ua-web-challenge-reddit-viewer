@@ -173,7 +173,32 @@ Subreddit.prototype = {
       reddit.comments( postId, this.name )
             .fetch(
               function( response ){
-                resolve( response );
+                var comments;
+
+                if ( Array.isArray( response ) ){
+                  // cut first unneeded comment, which is subreddit text
+                  response = response.slice(1);
+
+                  // retrieve target comments data from response
+                  if ( response.length ){
+                    comments = response[0].data.children.map(function retrieveComment( item ){
+                      item = item.data;
+
+                      if ( item.replies && item.replies.data ){
+                        item.replies = item.replies.data.children.map(retrieveComment);
+                      }
+
+                      return {
+                        text: item.body,
+                        author: item.author,
+                        created: item.created_utc,
+                        replies: item.replies
+                      };
+                    });
+                  }
+                }
+
+                resolve( comments );
               },
               function( error ){
                 console.warn( "Failed to fetch comments for '%s' post", postId, error );

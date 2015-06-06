@@ -62,5 +62,11 @@ module.exports = Reflux.createStore({
     this._selectedPost = index;
 
     this.trigger( this.getCurrentState() );
+  },
+
+  onBackToSection: function(){
+    this._state = subredditStates.SUBREDDIT_READY;
+
+    this.trigger( this.getCurrentState() );
   }
 });
